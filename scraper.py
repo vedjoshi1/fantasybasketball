@@ -31,7 +31,7 @@ def get_player_attributes(id):
 
         inf[var] = mfinfo[0][var]
 
-    print(inf)
+ #   print(inf)
     return inf
 
 def get_player_curr_season_stats_from_name(name):

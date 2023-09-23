@@ -1,4 +1,4 @@
-
+import json
 from nba_api.stats.static import players
 from nba_api.stats.endpoints import commonplayerinfo
 from scraper import get_player_attributes, get_player_past_stat
@@ -12,12 +12,13 @@ def Merge(dict1, dict2):
     return res
 
 playstatdict = {}
-
-for i in range((50)):
+#playerID = []
+for i in range((100)):
     pid = allPlayers[i]['id']
     player_info = commonplayerinfo.CommonPlayerInfo(player_id=pid)
     player_info = player_info.get_data_frames()
-    print(player_info[0]['DISPLAY_LAST_COMMA_FIRST'])
+   # print(player_info[0]['DISPLAY_LAST_COMMA_FIRST']) #Must comment this out later, leave it now as a status indicator
+  #  print(pid)
     d1 = get_player_attributes(pid)
     d2 = get_player_past_stat(pid)
     seasonsDict = {}
@@ -36,14 +37,25 @@ for i in range((50)):
 
 
     playstatdict[pid] = seasonsDict
+  ##  playerID.append(pid)
 
-#Make PlayerID the key for the dict, to allow us to find a player
-#Make the dictionary value a dictionary of each season's statistics, with Season_ID as the key, and the
+
+#Made PlayerID the key for the dict, to allow us to find a player
+#Made the dictionary value a dictionary of each season's statistics, with Season_ID as the key, and the
 #value being a list of the season's stats
-#This will allow us to filter by player and Season
+#This allows us to filter by player and Season
 #Find a way to extract points LATER, also consider changing scraper to simply return a dictionary of seasons
 
+#find a better way to convert this dict to pandas, or maybe don't even do it yet
 
-frame = pd.DataFrame(playstatdict).T.reset_index()
-#frame.to_csv('pastSznData.csv', index=False)
+
+    #Have found a solution that allows the database to be saved properly into the .csv file. Will need to perhaps fine tune it later,
+    #but is a good solution for now
+
+#frame = pd.DataFrame(playstatdict)
+df = pd.DataFrame.from_dict(playstatdict, orient='index')
+#ids = pd.DataFrame(playerID)
+
+
+df.to_csv('pastSznData.csv', index=True)
 

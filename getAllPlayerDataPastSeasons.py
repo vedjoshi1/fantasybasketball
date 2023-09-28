@@ -3,7 +3,7 @@ from nba_api.stats.static import players
 from nba_api.stats.endpoints import commonplayerinfo
 from scraper import get_player_attributes, get_player_past_stat
 import pandas as pd
-from constants import historical_training_vars
+from constants import historical_training_vars, player_attribute_vars
 
 allPlayers = players.get_active_players()
 
@@ -19,6 +19,7 @@ for i in range((100)):
     player_info = player_info.get_data_frames()
    # print(player_info[0]['DISPLAY_LAST_COMMA_FIRST']) #Must comment this out later, leave it now as a status indicator
   #  print(pid)
+    print(i)
     d1 = get_player_attributes(pid)
     d2 = get_player_past_stat(pid)
     seasonsDict = {}
@@ -26,9 +27,10 @@ for i in range((100)):
        seasonStats = []
        for var in historical_training_vars:
            seasonStats.append(d2[var][j])
+       for var1 in player_attribute_vars:
+           seasonStats.append(d1[var1][0])
 
 
-       seasonStats.append(d1.values())
 
        seasonsDict[d2['SEASON_ID'][j]] = seasonStats
 
